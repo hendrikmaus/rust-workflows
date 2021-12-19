@@ -17,7 +17,7 @@ on:
       - opened
       - reopened
       - synchronize
-    *ignore
+    <<: *ignore
 
 env:
   CARGO_TERM_COLOR: always
@@ -82,7 +82,7 @@ jobs:
 
   clippy:
     name: Clippy Check
-    *strategy
+    <<: *strategy
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
