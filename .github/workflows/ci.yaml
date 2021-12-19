@@ -9,7 +9,7 @@ on:
     branches:
       - main
       - master
-    paths-ignore: &ignore
+    paths-ignore:
       - "docs/**"
       - "**.md"
   pull_request:
@@ -17,7 +17,9 @@ on:
       - opened
       - reopened
       - synchronize
-    <<: *ignore
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
 
 env:
   CARGO_TERM_COLOR: always
@@ -60,7 +62,7 @@ jobs:
 
   test:
     name: Test
-    strategy: &strategy
+    strategy:
       matrix:
         os:
           - ubuntu-latest
@@ -82,7 +84,12 @@ jobs:
 
   clippy:
     name: Clippy Check
-    <<: *strategy
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest
     runs-on: ${{matrix.os}}
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
