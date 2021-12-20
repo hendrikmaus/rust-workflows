@@ -29,15 +29,15 @@ jobs:
         include:
           - { target: x86_64-unknown-linux-gnu, os: ubuntu-latest, cross: true }
           - { target: x86_64-unknown-linux-musl, os: ubuntu-latest, cross: true }
-          - { target: i686-unknown-linux-musl, os: ubuntu-latest, cross: true }
-          - { target: aarch64-unknown-linux-musl, os: ubuntu-latest, cross: true }
-          - { target: arm-unknown-linux-musleabihf, os: ubuntu-latest, cross: true }
-          - { target: x86_64-apple-darwin, os: macOS-latest, cross: false }
-          - { target: aarch64-apple-darwin, os: macOS-latest, cross: false }
-          - { target: x86_64-pc-windows-msvc, os: windows-latest, cross: false }
-          - { target: i686-pc-windows-msvc, os: windows-latest, cross: false }
-          - { target: aarch64-pc-windows-msvc, os: windows-latest, cross: false }
-          - { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: true }
+          #- { target: i686-unknown-linux-musl, os: ubuntu-latest, cross: true }
+          #- { target: aarch64-unknown-linux-musl, os: ubuntu-latest, cross: true }
+          #- { target: arm-unknown-linux-musleabihf, os: ubuntu-latest, cross: true }
+          #- { target: x86_64-apple-darwin, os: macOS-latest, cross: false }
+          #- { target: aarch64-apple-darwin, os: macOS-latest, cross: false }
+          #- { target: x86_64-pc-windows-msvc, os: windows-latest, cross: false }
+          #- { target: i686-pc-windows-msvc, os: windows-latest, cross: false }
+          #- { target: aarch64-pc-windows-msvc, os: windows-latest, cross: false }
+          #- { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: true }
     continue-on-error: true
     runs-on: ${{ matrix.os }}
     steps:
@@ -74,6 +74,7 @@ jobs:
           args: --release --target ${{ matrix.target }}
           use-cross: ${{ matrix.cross }}
 
+      # todo no `tar` found on macOS runners
       - name: Compress Unix
         if: runner.os != 'Windows'
         run: |
