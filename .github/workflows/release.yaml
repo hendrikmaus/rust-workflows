@@ -10,8 +10,8 @@ on:
       - release-workflow
 
 env:
-  # replace with your project name
-  PROJ_NAME: rs-workflow
+  # replace with your binary name as it appears in target/*/release
+  PROJ_NAME: rust-workflows
   CACHE_REGISTRY: ghcr.io
   CACHE_IMAGE: ${{ github.repository }}/release-cache
   CARGO_TERM_COLOR: always
