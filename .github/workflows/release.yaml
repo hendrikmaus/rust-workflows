@@ -24,6 +24,7 @@ jobs:
   binaries:
     name: Binaries
     strategy:
+      fail-fast: false
       matrix:
         include:
           - { target: x86_64-unknown-linux-gnu, os: ubuntu-latest, cross: true }
@@ -37,6 +38,7 @@ jobs:
           - { target: i686-pc-windows-msvc, os: windows-latest, cross: false }
           - { target: aarch64-pc-windows-msvc, os: windows-latest, cross: false }
           - { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: false }
+    continue-on-error: true
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
