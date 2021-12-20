@@ -5,6 +5,9 @@ on:
   push:
     tags:
       - 'v*'
+    # for testing on a branch
+    branches:
+      - release-workflow
 
 env:
   # replace with your project name
