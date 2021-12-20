@@ -79,13 +79,20 @@ jobs:
           args: --release --target ${{ matrix.target }}
           use-cross: ${{ matrix.cross }}
 
-      # todo no `tar` found on macOS runners
-      - name: Compress Unix
-        if: runner.os != 'Windows'
+      - name: Compress Linux
+        if: runner.os == 'Linux'
         run: |
           cd target/${{ matrix.target }}/release
           ls -la
           tar czvf "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.tar.gz" "${PROJ_NAME}"
+          cd -
+
+      - name: Compress BSD
+        if: runner.os == 'macOS'
+        run: |
+          cd target/${{ matrix.target }}/release
+          ls -la
+          gtar czvf "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.tar.gz" "${PROJ_NAME}"
           cd -
 
       - name: Compress Windows
