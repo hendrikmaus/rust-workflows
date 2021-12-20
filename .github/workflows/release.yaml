@@ -37,7 +37,7 @@ jobs:
           - { target: x86_64-pc-windows-msvc, os: windows-latest, cross: false }
           - { target: i686-pc-windows-msvc, os: windows-latest, cross: false }
           - { target: aarch64-pc-windows-msvc, os: windows-latest, cross: false }
-          - { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: false }
+          - { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: true }
     continue-on-error: true
     runs-on: ${{ matrix.os }}
     steps:
