@@ -79,6 +79,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd target/${{ matrix.target }}/release
+          ls -la
           tar czvf "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.tar.gz" "${PROJ_NAME}"
           cd -
 
