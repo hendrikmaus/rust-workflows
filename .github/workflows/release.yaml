@@ -27,17 +27,28 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # Supported `cross` targets:
+          #   https://github.com/rust-embedded/cross#supported-targets
+
+          # Linux targets; cached
           - { target: x86_64-unknown-linux-gnu, os: ubuntu-latest, cross: true }
           - { target: x86_64-unknown-linux-musl, os: ubuntu-latest, cross: true }
-          - { target: i686-unknown-linux-musl, os: ubuntu-latest, cross: true }
           - { target: aarch64-unknown-linux-musl, os: ubuntu-latest, cross: true }
-          - { target: arm-unknown-linux-musleabihf, os: ubuntu-latest, cross: true }
+          #- { target: i686-unknown-linux-musl, os: ubuntu-latest, cross: true }
+          #- { target: arm-unknown-linux-musleabihf, os: ubuntu-latest, cross: true }
+
+          # macOS targets; un-cached
           - { target: x86_64-apple-darwin, os: macOS-latest, cross: false }
           - { target: aarch64-apple-darwin, os: macOS-latest, cross: false }
-          - { target: aarch64-pc-windows-msvc, os: windows-latest, cross: false }
+
+          # Windows works, but is extremely slow and un-cached
+          #- { target: aarch64-pc-windows-msvc, os: windows-latest, cross: false }
           - { target: x86_64-pc-windows-msvc, os: windows-latest, cross: false }
-          - { target: i686-pc-windows-msvc, os: windows-latest, cross: false }
-          - { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: false }
+          #- { target: i686-pc-windows-msvc, os: windows-latest, cross: false }
+
+          # FreeBSD; linking fails
+          #- { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: false }
+
     continue-on-error: true
     runs-on: ${{ matrix.os }}
     steps:
@@ -74,27 +85,24 @@ jobs:
           args: --release --target ${{ matrix.target }}
           use-cross: ${{ matrix.cross }}
 
-      - name: Compress Linux
-        if: runner.os == 'Linux'
+      - name: Compress
         run: |
           cd target/${{ matrix.target }}/release
-          ls -la
-          tar czvf "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.tar.gz" "${PROJ_NAME}"
-          cd -
-
-      - name: Compress BSD
-        if: runner.os == 'macOS'
-        run: |
-          cd target/${{ matrix.target }}/release
-          ls -la
-          gtar czvf "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.tar.gz" "${PROJ_NAME}"
-          cd -
-
-      - name: Compress Windows
-        if: runner.os == 'Windows'
-        run: |
-          cd target/${{ matrix.target }}/release
-          7z a "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.zip" "${PROJ_NAME}.exe"
+          case "${RUNNER_OS}" in
+            Linux)
+              tar czvf "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.tar.gz" "${PROJ_NAME}"
+              ;;
+            macOS)
+              # gh docs say gtar is aliased to tar, but it failed
+              gtar czvf "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.tar.gz" "${PROJ_NAME}"
+              ;;
+            Windows)
+              7z a "${GITHUB_WORKSPACE}/${PROJ_NAME}-${{ matrix.target }}.zip" "${PROJ_NAME}.exe"
+              ;;
+            *)
+              echo "[ERROR] unsupported OS: ${RUNNER_OS}"
+              exit 1
+          esac
           cd -
 
       - name: Upload Unix
