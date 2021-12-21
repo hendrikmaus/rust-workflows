@@ -1,5 +1,11 @@
 ---
 # Release Workflow For Rust
+#
+# This workflow is based on a matrix build to provide pre-compiled binaries
+# for multiple operating systems.
+#
+# Builds on Linux are cached, see https://blog.hendrikmaus.dev/github-actions-release-caching/
+#
 name: Release
 on:
   push:
@@ -153,3 +159,6 @@ jobs:
         with:
           files: ${{ env.PROJ_NAME }}-*/${{ env.PROJ_NAME }}-*
           generate_release_notes: true
+
+  # todo publish to crates.io
+  # todo update a homebrew tap using https://github.com/mislav/bump-homebrew-formula-action
