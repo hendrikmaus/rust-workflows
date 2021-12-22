@@ -1,4 +1,6 @@
 ---
+# Source: https://github.com/hendrikmaus/rust-workflows
+#
 # Release Workflow For Rust
 #
 # This workflow is based on a matrix build to provide pre-compiled binaries

@@ -1,3 +1,5 @@
+<!-- Source: https://github.com/hendrikmaus/rust-workflows -->
+
 # Release Process
 
 Bump the version, e.g.:
