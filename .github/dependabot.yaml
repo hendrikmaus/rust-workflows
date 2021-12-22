@@ -1,4 +1,5 @@
 ---
+# Source: https://github.com/hendrikmaus/rust-workflows
 #
 # Use GitHub's Dependabot to receive automatic pull-requests
 # to update project dependencies.

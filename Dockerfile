@@ -1,3 +1,5 @@
+# Source: https://github.com/hendrikmaus/rust-workflows
+
 # https://github.com/GoogleContainerTools/distroless/blob/main/cc/README.md
 FROM gcr.io/distroless/cc-debian11 as runtime
 

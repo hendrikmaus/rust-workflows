@@ -1,4 +1,5 @@
 ---
+# Source: https://github.com/hendrikmaus/rust-workflows
 #
 # Automatically merge Dependabot pull-requests.
 #

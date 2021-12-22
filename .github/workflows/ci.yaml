@@ -1,4 +1,6 @@
 ---
+# Source: https://github.com/hendrikmaus/rust-workflows
+#
 # Continuous Integration Workflow For Rust
 name: CI
 
