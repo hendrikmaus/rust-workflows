@@ -6,6 +6,9 @@
 #
 # Builds on Linux are cached, see https://blog.hendrikmaus.dev/github-actions-release-caching/
 #
+# The job to publish to crates.io requires a secret with a token
+# called `CARGO_REGISTRY_TOKEN`
+#
 name: Release
 on:
   push:
@@ -160,5 +163,43 @@ jobs:
           files: ${{ env.PROJ_NAME }}-*/${{ env.PROJ_NAME }}-*
           generate_release_notes: true
 
-  # todo publish to crates.io
+  cratesio:
+    name: Publish to crates.io
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@568dc894a7f9e32ffd9bb7d7a6cebb784cdaa2b0
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.CACHE_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Restore cache
+        uses: hendrikmaus/custom-cache-action/restore@master
+        with:
+          registry: ${{ env.CACHE_REGISTRY }}
+          image: ${{ env.CACHE_IMAGE }}
+          tag: cratesio
+
+      - name: Publish to crates.io
+        run: |
+          cargo publish --token "${{ secrets.CARGO_REGISTRY_TOKEN }}"
+
+      - name: Save cache
+        uses: hendrikmaus/custom-cache-action/save@master
+        with:
+          paths: "${{ github.workspace }}/target /home/runner/.cargo/registry/index /home/runner/.cargo/registry/cache"
+          registry: ${{ env.CACHE_REGISTRY }}
+          image: ${{ env.CACHE_IMAGE }}
+          tag: cratesio
+
   # todo update a homebrew tap using https://github.com/mislav/bump-homebrew-formula-action
