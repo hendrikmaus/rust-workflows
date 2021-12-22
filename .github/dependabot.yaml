@@ -1,0 +1,20 @@
+---
+#
+# Use GitHub's Dependabot to receive automatic pull-requests
+# to update project dependencies.
+#
+# Combined with the workflow `dependabot.yaml`, you can even auto-merge
+# these if all tests in `ci.yaml` pass.
+#
+# Docs: https://git.io/JCUAY
+#
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    # to only target specific dependencies
+    #allow:
+    #  - dependency-name: kube

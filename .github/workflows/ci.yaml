@@ -10,16 +10,16 @@ on:
       - main
       - master
     paths-ignore:
-      - "docs/**"
-      - "**.md"
+      - 'docs/**'
+      - '**.md'
   pull_request:
     types:
       - opened
       - reopened
       - synchronize
     paths-ignore:
-      - "docs/**"
-      - "**.md"
+      - 'docs/**'
+      - '**.md'
 
 env:
   CARGO_TERM_COLOR: always
