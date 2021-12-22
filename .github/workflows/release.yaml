@@ -231,7 +231,7 @@ jobs:
           docker build \
             --tag "${tag}" \
             --build-arg bin="${PROJ_NAME}" \
-            --build-arg bin_target="target/${IMAGE_BINARY_TARGET}" \
+            --build-arg bin_path="target/${IMAGE_BINARY_TARGET}/release/${PROJ_NAME}" \
             --file "${GITHUB_WORKSPACE}/Dockerfile" \
             "${GITHUB_WORKSPACE}"
           echo "::endgroup::"
