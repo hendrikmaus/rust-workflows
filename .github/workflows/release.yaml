@@ -194,10 +194,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Ensure dir
-        run: |
-          mkdir -p "${GITHUB_WORKSPACE}/target/${IMAGE_BINARY_TARGET}/release"
-
       - name: Binaries
         uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
         with:
