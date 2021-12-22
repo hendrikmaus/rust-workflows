@@ -7,6 +7,20 @@ Bump the version, e.g.:
 cargo bump <major|minor|patch>
 ```
 
+Update lock file:
+
+```shell
+cargo check
+```
+
+Commit new version:
+
+```shell
+git add Cargo.toml Cargo.lock
+git commit -m 'Bump version'
+git push
+```
+
 Create a tag and push it:
 
 ```shell
