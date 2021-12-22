@@ -208,6 +208,10 @@ jobs:
         env:
           DOCKER_BUILDKIT: 'true'
         run: |
+          echo "::group::Target binary"
+          ls -la target/${{ env.IMAGE_BINARY_TARGET }}/release/
+          echo ::endgroup::"
+          
           echo "::group::Determine image tag"
           tag=""
           if [[ "${GITHUB_REF}" == *"refs/tags"* ]]; then
