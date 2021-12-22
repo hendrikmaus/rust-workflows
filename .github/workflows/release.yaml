@@ -186,6 +186,44 @@ jobs:
           files: ${{ env.PROJ_NAME }}-*/${{ env.PROJ_NAME }}-*
           generate_release_notes: true
 
+  containerize:
+    name: Containerize
+    needs: binaries
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Ensure dir
+        run: |
+          mkdir -p "${GITHUB_WORKSPACE}/target/${IMAGE_BINARY_TARGET}/release"
+
+      - name: Binaries
+        uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
+        with:
+          name: "${{ env.PROJ_NAME }}-${{ env.IMAGE_BINARY_TARGET }}"
+          path: "target/${{ env.IMAGE_BINARY_TARGET }}/release/"
+
+      - name: Build & Push
+        env:
+          DOCKER_BUILDKIT: 'true'
+        run: |
+          tag="${IMAGE_REGISTRY}/${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}"
+          echo "[INFO] tag is: '${tag}'"
+          
+          echo "::group::Container build"
+          docker build \
+            --tag "${tag}" \
+            --build-arg bin="${PROJ_NAME}" \
+            --build-arg bin_target="${IMAGE_BINARY_TARGET}" \
+            --file "${GITHUB_WORKSPACE}/Dockerfile" \
+            "${GITHUB_WORKSPACE}"
+          echo "::endgroup::"
+          
+          echo "::group::Container push"
+          docker push "${tag}"
+          echo "::endgroup::"
+
   cratesio:
     name: Publish to crates.io
     if: startsWith(github.ref, 'refs/tags/')
