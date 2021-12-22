@@ -15,14 +15,36 @@ on:
     tags:
       - 'v*'
     # for testing on a branch
-    #branches:
-    #  - release-workflow
+    branches:
+      - container-image
 
 env:
   # replace with your binary name as it appears in target/*/release
   PROJ_NAME: rust-workflows
+
+  # used for storing release caches as containers
   CACHE_REGISTRY: ghcr.io
   CACHE_IMAGE: ${{ github.repository }}/release-cache
+
+  ## Options for containerization
+
+  # binary of which build target to copy into the container
+  #   the step will download the artifact built by the `binaries` job
+  #   it will try and download `$PROJ_NAME-$IMAGE_BINARY_TARGET`
+  IMAGE_BINARY_TARGET: x86_64-unknown-linux-musl
+
+  # container registry to use
+  #   if not using ghcr.io, you'll need to adapt the step
+  IMAGE_REGISTRY: ghcr.io
+
+  # image name to use
+  #   `$IMAGE_REGISTRY/$IMAGE_NAME:$TAG`
+  #   where `$TAG` will be derived from `GITHUB_REF`
+  #   e.g. `refs/tags/v1.0.0 -> v1.0.0`
+  IMAGE_NAME: ${{ github.repository }}
+
+  ## Misc. options
+
   CARGO_TERM_COLOR: always
 
 defaults:
