@@ -208,7 +208,14 @@ jobs:
         env:
           DOCKER_BUILDKIT: 'true'
         run: |
-          tag="${IMAGE_REGISTRY}/${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}"
+          tag=""
+          
+          if [[ "${GITHUB_REF}" == *"refs/tags"* ]]; then
+            tag="${IMAGE_REGISTRY}/${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}"
+          else
+            tag="${IMAGE_REGISTRY}/${IMAGE_NAME}:${GITHUB_REF/refs\/heads\//}"
+          fi
+          
           echo "[INFO] tag is: '${tag}'"
           
           echo "::group::Container build"
