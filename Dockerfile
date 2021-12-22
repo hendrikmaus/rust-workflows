@@ -27,5 +27,5 @@ LABEL org.opencontainers.image.description="A reference for GitHub Action workfl
 
 # uid 65532
 USER nonroot
-COPY ${bin_path:-"target/release/${bin}"} /usr/local/bin/
-CMD ["/usr/local/bin/${bin}"]
+COPY ${bin_path:-"target/release/${bin}"} /usr/local/bin/app
+CMD ["/usr/local/bin/app"]
