@@ -206,7 +206,7 @@ jobs:
         run: |
           echo "::group::Extract binary"
           tar -C "target/${IMAGE_BINARY_TARGET}/release" \
-            -xf "target/${IMAGE_BINARY_TARGET}/release/${PROJ_NAME}-${IMAGE_BINARY_TARGET}.tar.gz"
+            -xfv "target/${IMAGE_BINARY_TARGET}/release/${PROJ_NAME}-${IMAGE_BINARY_TARGET}.tar.gz"
           echo "::endgroup::"
           
           echo "::group::Determine image tag"
