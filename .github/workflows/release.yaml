@@ -208,8 +208,8 @@ jobs:
         env:
           DOCKER_BUILDKIT: 'true'
         run: |
+          echo "::group::Determine image tag"
           tag=""
-          
           if [[ "${GITHUB_REF}" == *"refs/tags"* ]]; then
             tag="${IMAGE_REGISTRY}/${IMAGE_NAME}:${GITHUB_REF/refs\/tags\//}"
           else
@@ -217,6 +217,7 @@ jobs:
           fi
           
           echo "[INFO] tag is: '${tag}'"
+          echo "::endgroup::"
           
           echo "::group::Container build"
           docker build \
