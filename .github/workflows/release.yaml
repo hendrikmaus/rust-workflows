@@ -17,8 +17,8 @@ on:
     tags:
       - 'v*'
     # for testing on a branch
-    branches:
-      - container-image
+    #branches:
+    #  - container-image
 
 env:
   # replace with your binary name as it appears in target/*/release
