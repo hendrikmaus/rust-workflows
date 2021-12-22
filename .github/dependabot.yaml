@@ -15,6 +15,7 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
+    allow:
+      - dependency-type: "all"
     # to only target specific dependencies
-    #allow:
     #  - dependency-name: kube
