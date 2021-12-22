@@ -201,7 +201,7 @@ jobs:
       - name: Binaries
         uses: actions/download-artifact@f023be2c48cc18debc3bacd34cb396e0295e2869
         with:
-          name: "${{ env.PROJ_NAME }}-${{ env.IMAGE_BINARY_TARGET }}"
+          name: "${{ env.PROJ_NAME }}-${{ env.IMAGE_BINARY_TARGET }}.tar.gz"
           path: "target/${{ env.IMAGE_BINARY_TARGET }}/release/"
 
       - name: Build & Push
