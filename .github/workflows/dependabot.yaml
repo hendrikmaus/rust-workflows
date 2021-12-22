@@ -1,0 +1,40 @@
+---
+#
+# Automatically merge Dependabot pull-requests.
+#
+# Please mind to set up a branch protection policy that lists required checks.
+# E.g. if a check called "test" is required, but fails on the pull-request,
+# the automatic merge will be stopped.
+#
+# Docs: https://git.io/Jg0PP
+#
+
+name: Dependabot auto-merge
+on:
+  pull_request:
+    paths:
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  pull-requests: write
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-20.04
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Enable auto-merge
+        run: gh pr merge --auto --merge "${PULL_REQUEST}"
+        env:
+          PULL_REQUEST: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
