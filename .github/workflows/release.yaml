@@ -302,4 +302,6 @@ jobs:
             Created by https://github.com/mislav/bump-homebrew-formula-action |
             Using reference workflow from https://github.com/hendrikmaus/rust-workflows
         env:
+          # Assuming your tap repo is public, create a PAT with public_repo scope
+          #   see: https://github.com/mislav/bump-homebrew-formula-action
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
