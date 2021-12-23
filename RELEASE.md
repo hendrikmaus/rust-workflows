@@ -7,6 +7,8 @@ Bump the version, e.g.:
 ```shell
 # cargo install cargo-bump
 cargo bump <major|minor|patch>
+export VERSION
+VERSION="v$(sed -n 's/^version = \"\(.*\)\"/\1/p' Cargo.toml)"
 ```
 
 Update lock file:
@@ -19,15 +21,29 @@ Commit new version:
 
 ```shell
 git add Cargo.toml Cargo.lock
-git commit -m 'Bump version'
+git commit -m "Bump version -> ${VERSION}"
 git push
 ```
 
 Create a tag and push it:
 
 ```shell
-git tag -a v1.0.0
-git push origin v1.0.0
+git tag -a "${VERSION}"
+git push origin "${VERSION}"
 ```
 
 GitHub Actions kicks in.
+
+The full process to copy & paste:
+
+```shell
+cargo bump <major|minor|patch>
+export VERSION
+VERSION="v$(sed -n 's/^version = \"\(.*\)\"/\1/p' Cargo.toml)"
+cargo check
+git add Cargo.toml Cargo.lock
+git commit -m "Bump version -> ${VERSION}"
+git push
+git tag -a "${VERSION}"
+git push origin "${VERSION}"
+```
