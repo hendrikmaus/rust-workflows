@@ -228,6 +228,9 @@ jobs:
           echo "::endgroup::"
           
           echo "::group::Container preflight"
+          # if the image can be pulled, we do not need to build it
+          # usually, container images in this scope should be small enough for this
+          # to not be too expensive. feel free to open a pr with a better solution
           if docker pull "${tag}" &>/dev/null; then
             echo "[INFO] found ${tag}, skipping build"
             exit 0
