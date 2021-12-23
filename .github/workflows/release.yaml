@@ -172,7 +172,7 @@ jobs:
 #          ls -la
 #          # let's see how the filesystem looks like afterwards
 #          # we may need to move everything into place
-          cd -
+#         cd -
 
 #      - name: Log in to the Container registry
 #        if: runner.os == 'Linux'
