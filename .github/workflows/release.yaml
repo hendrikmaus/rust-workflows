@@ -261,13 +261,18 @@ jobs:
         id: release
         run: |
           index_version=$(cargo search rust-workflows | awk '{print $3}' | tr -d '"')
+          echo "[INFO] crates.io ${index_version}"
+          
           local_version=$(sed -n 's/^version = \"\(.*\)\"/\1/p' Cargo.toml)
+          echo "[INFO] to-release ${local_version}"
           
           if [[ "${index_version}" == "${local_version}" ]]; then
+            echo "[INFO] skip crates.io publishing"
             echo "::set-output name=continue::false"
             exit 0
           fi
           
+          echo "[INFO] publish to crates.io"
           echo "::set-output name=continue::true"
 
   # Publish the release to crates.io if the preflight check let's us continue
