@@ -245,6 +245,7 @@ jobs:
   cratesio:
     name: Publish to crates.io
     if: startsWith(github.ref, 'refs/tags/')
+    needs: binaries
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -288,6 +289,7 @@ jobs:
   homebrew:
     name: Bump Homebrew formula
     if: startsWith(github.ref, 'refs/tags/')
+    needs: binaries
     runs-on: ubuntu-20.04
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1
