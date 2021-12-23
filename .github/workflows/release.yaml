@@ -338,7 +338,8 @@ jobs:
           
           brew tap hendrikmaus/homebrew-tap
           
-          index_version=$(brew info "${PROJ_NAME}" | head -n 1 | awk '{print $3}')
+          brew_info=$(brew info "${PROJ_NAME}")
+          index_version=$(echo "${brew_info}" | head -n 1 | awk '{print $3}')
           echo "[INFO] tap ${index_version}"
           
           if [[ "${index_version}" == "${local_version}" ]]; then
