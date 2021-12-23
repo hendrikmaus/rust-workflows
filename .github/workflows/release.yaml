@@ -147,19 +147,31 @@ jobs:
           profile: minimal
           target: ${{ matrix.target }}
 
-      - name: Restore cache
+      - uses: actions/download-artifact@v2
         if: ${{ needs.cache.outputs.cache_hit == 'true' }}
-        env:
-          CACHE_NAME: ${{ needs.cache.outputs.cache_name }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tempdir=$(mktemp -d)
-          cd "${tempdir}"
-          # downloads and extracts the artifact
-          gh run download "${GITHUB_RUN_ID}" --name "${CACHE_NAME}" --repo "${GITHUB_REPOSITORY}"
-          ls -la
-          # let's see how the filesystem looks like afterwards
-          # we may need to move everything into place
+        with:
+          name: ${{ needs.cache.outputs.cache_name }}
+          path: /tmp/cache
+
+      - name: Display structure of downloaded files
+        if: ${{ needs.cache.outputs.cache_hit == 'true' }}
+        run: ls -R
+        working-directory: /tmp/cache
+
+# todo looks like gh can only access the artifacts after the fact
+#      - name: Restore cache
+#        if: ${{ needs.cache.outputs.cache_hit == 'true' }}
+#        env:
+#          CACHE_NAME: ${{ needs.cache.outputs.cache_name }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        run: |
+#          tempdir=$(mktemp -d)
+#          cd "${tempdir}"
+#          # downloads and extracts the artifact
+#          gh run download "${GITHUB_RUN_ID}" --name "${CACHE_NAME}" --repo "${GITHUB_REPOSITORY}"
+#          ls -la
+#          # let's see how the filesystem looks like afterwards
+#          # we may need to move everything into place
           cd -
 
 #      - name: Log in to the Container registry
