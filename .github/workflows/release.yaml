@@ -302,8 +302,10 @@ jobs:
           commit-message: |
             {{formulaName}} {{version}}
             
-            Created by https://github.com/mislav/bump-homebrew-formula-action |
-            Using reference workflow from https://github.com/hendrikmaus/rust-workflows
+            Update **{{formulaName}}** to `{{version}}`.
+            
+            _Created by [mislav/bump-homebrew-formula-action](https://github.com/mislav/bump-homebrew-formula-action), 
+            using [hendrikmaus/rust-workflows](https://github.com/hendrikmaus/rust-workflows)
         env:
           # Assuming your tap repo is public, create a PAT with public_repo scope
           #   see: https://github.com/mislav/bump-homebrew-formula-action
