@@ -319,13 +319,48 @@ jobs:
           image: ${{ env.CACHE_IMAGE }}
           tag: cratesio
 
+  # Determine if the homebrew tap already has the current release
+  homebrew_preflight:
+    name: homebrew | preflight
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-20.04
+    outputs:
+      continue: ${{ steps.release.outputs.continue }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout
+
+      - name: Homebrew
+        id: release
+        run: |
+          local_version=$(sed -n 's/^version = \"\(.*\)\"/\1/p' Cargo.toml)
+          echo "[INFO] to-release ${local_version}"
+          
+          echo "::group::brew tap"
+          brew tap hendrikmaus/homebrew-tap
+          echo "::endgroup::"
+          
+          index_version=$(brew info rust-workflows | head -n 1 | awk '{print $3}')
+          echo "[INFO] tap ${index_version}"
+          
+          if [[ "${index_version}" == "${local_version}" ]]; then
+            echo "[INFO] skip homebrew publishing"
+            echo "::set-output name=continue::false"
+            exit 0
+          fi
+          
+          echo "[INFO] publish to homebrew"
+          echo "::set-output name=continue::true"
+
   # Update a Homebrew tap
   #
   # Requires an initial version of the formula to be present in the tap for updating.
   homebrew:
-    name: Bump Homebrew formula
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: binaries
+    name: homebrew | publish
+    if: ${{ startsWith(github.ref, 'refs/tags/') && needs.homebrew_preflight.outputs.continue == 'true' }}
+    needs:
+      - binaries
+      - homebrew_preflight
     runs-on: ubuntu-20.04
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1
