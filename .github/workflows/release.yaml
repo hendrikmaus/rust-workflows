@@ -94,7 +94,7 @@ jobs:
       # todo can windows runners extract a tarball? tgz file > they have gh installed and it can
       # Upload the raw tarball from the cache so all subsequent jobs can use it
       - name: Upload cache
-        if: steps.restore.outputs.cache_hit == true
+        if: ${{ steps.restore.outputs.cache_hit == "true" }}
         uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2
         with:
           name: cache.tgz
@@ -148,7 +148,7 @@ jobs:
           target: ${{ matrix.target }}
 
       - name: Restore cache
-        if: needs.cache.outputs.cache_hit == true
+        if: ${{ needs.cache.outputs.cache_hit == "true" }}
         env:
           CACHE_NAME: ${{ needs.cache.outputs.cache_name }}
         run: |
