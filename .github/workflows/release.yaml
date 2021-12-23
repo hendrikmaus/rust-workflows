@@ -282,6 +282,9 @@ jobs:
           image: ${{ env.CACHE_IMAGE }}
           tag: cratesio
 
+  # Update a Homebrew tap
+  #
+  # Requires an initial version of the formula to be present in the tap for updating.
   homebrew:
     name: Bump Homebrew formula
     if: startsWith(github.ref, 'refs/tags/')
