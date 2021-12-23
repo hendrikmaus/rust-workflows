@@ -151,6 +151,7 @@ jobs:
         if: ${{ needs.cache.outputs.cache_hit == 'true' }}
         env:
           CACHE_NAME: ${{ needs.cache.outputs.cache_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tempdir=$(mktemp -d)
           cd "${tempdir}"
