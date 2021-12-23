@@ -156,7 +156,7 @@ jobs:
           tempdir=$(mktemp -d)
           cd "${tempdir}"
           # downloads and extracts the artifact
-          gh run download "${GITHUB_RUN_ID}" -n "${CACHE_NAME}"
+          gh run download "${GITHUB_RUN_ID}" --name "${CACHE_NAME}" --repo "${GITHUB_REPOSITORY}"
           ls -la
           # let's see how the filesystem looks like afterwards
           # we may need to move everything into place
