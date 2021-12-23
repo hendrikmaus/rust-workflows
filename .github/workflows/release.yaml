@@ -278,7 +278,7 @@ jobs:
   # Publish the release to crates.io if the preflight check let's us continue
   cratesio:
     name: crates.io | publish
-    if: startsWith(github.ref, 'refs/tags/') && needs.cratesio_preflight.outputs.continue == 'true'
+    if: ${{ startsWith(github.ref, 'refs/tags/') && needs.cratesio_preflight.outputs.continue == 'true' }}
     needs:
      - binaries
      - cratesio_preflight
