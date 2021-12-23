@@ -227,6 +227,13 @@ jobs:
           echo "[INFO] tag is: '${tag}'"
           echo "::endgroup::"
           
+          echo "::group::Container preflight"
+          if docker pull "${tag}" &>/dev/null; then
+            echo "[INFO] found ${tag}, skipping build"
+            exit 0
+          fi
+          echo "::endgroup::"
+          
           echo "::group::Container build"
           docker build \
             --tag "${tag}" \
