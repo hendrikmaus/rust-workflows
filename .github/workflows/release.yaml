@@ -304,4 +304,4 @@ jobs:
         env:
           # Assuming your tap repo is public, create a PAT with public_repo scope
           #   see: https://github.com/mislav/bump-homebrew-formula-action
-          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_COMMIT_TOKEN }}
