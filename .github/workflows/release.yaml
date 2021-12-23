@@ -295,6 +295,7 @@ jobs:
           base-branch: main
           # e.g. https://github.com/hendrikmaus/rust-workflows/archive/refs/tags/v0.3.1.tar.gz
           download-url: https://github.com/${{ github.repository }}/archive/${{ github.ref }}.tar.gz
+          create-pullrequest: true
           commit-message: |
             {{formulaName}} {{version}}
             
