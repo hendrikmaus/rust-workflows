@@ -155,7 +155,13 @@ jobs:
 
       - name: Display structure of downloaded files
         if: ${{ needs.cache.outputs.cache_hit == 'true' }}
-        run: ls -R
+        env:
+          CACHE_NAME: ${{ needs.cache.outputs.cache_name }}
+        run: |
+          ls -la
+          
+          echo "expanding cache to disk"
+          tar xpzf "${CACHE_NAME}" -P
         working-directory: /tmp/cache
 
 # todo looks like gh can only access the artifacts after the fact
