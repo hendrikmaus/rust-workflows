@@ -282,4 +282,29 @@ jobs:
           image: ${{ env.CACHE_IMAGE }}
           tag: cratesio
 
-  # todo update a homebrew tap using https://github.com/mislav/bump-homebrew-formula-action
+  # Update a Homebrew tap
+  #
+  # Requires an initial version of the formula to be present in the tap for updating.
+  homebrew:
+    name: Bump Homebrew formula
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: mislav/bump-homebrew-formula-action@v1
+        with:
+          formula-name: ${{ env.PROJ_NAME }}
+          formula-path: Formula/${{ env.PROJ_NAME }}.rb
+          homebrew-tap: hendrikmaus/homebrew-tap
+          base-branch: main
+          # e.g. https://github.com/hendrikmaus/rust-workflows/archive/refs/tags/v0.3.1.tar.gz
+          download-url: https://github.com/${{ github.repository }}/archive/${{ github.ref }}.tar.gz
+          create-pullrequest: true
+          commit-message: |
+            {{formulaName}} {{version}}
+            
+            Created by https://github.com/mislav/bump-homebrew-formula-action |
+            Using reference workflow from https://github.com/hendrikmaus/rust-workflows
+        env:
+          # Assuming your tap repo is public, create a PAT with public_repo scope
+          #   see: https://github.com/mislav/bump-homebrew-formula-action
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_COMMIT_TOKEN }}
