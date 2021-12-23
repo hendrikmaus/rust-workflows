@@ -17,8 +17,8 @@ on:
     tags:
       - 'v*'
     # for testing on a branch
-    branches:
-      - homebrew-preflight
+    #branches:
+    #  - container-image
 
 env:
   # replace with your binary name as it appears in target/*/release
@@ -322,7 +322,7 @@ jobs:
   # Determine if the homebrew tap already has the current release
   homebrew_preflight:
     name: homebrew | preflight
-    #if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-20.04
     outputs:
       continue: ${{ steps.release.outputs.continue }}
@@ -356,8 +356,7 @@ jobs:
   # Requires an initial version of the formula to be present in the tap for updating.
   homebrew:
     name: homebrew | publish
-    #if: ${{ startsWith(github.ref, 'refs/tags/') && needs.homebrew_preflight.outputs.continue == 'true' }}
-    if: ${{ needs.homebrew_preflight.outputs.continue == 'true' }}
+    if: ${{ startsWith(github.ref, 'refs/tags/') && needs.homebrew_preflight.outputs.continue == 'true' }}
     needs:
       - binaries
       - homebrew_preflight
