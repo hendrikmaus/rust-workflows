@@ -57,7 +57,6 @@ jobs:
   binaries:
     name: Binaries
     strategy:
-      fail-fast: false
       matrix:
         include:
           # Supported `cross` targets:
@@ -82,7 +81,6 @@ jobs:
           # FreeBSD; linking fails
           #- { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: false }
 
-    continue-on-error: true
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -245,6 +243,7 @@ jobs:
   cratesio:
     name: Publish to crates.io
     if: startsWith(github.ref, 'refs/tags/')
+    needs: binaries
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -288,6 +287,7 @@ jobs:
   homebrew:
     name: Bump Homebrew formula
     if: startsWith(github.ref, 'refs/tags/')
+    needs: binaries
     runs-on: ubuntu-20.04
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1
