@@ -57,7 +57,6 @@ jobs:
   binaries:
     name: Binaries
     strategy:
-      fail-fast: false
       matrix:
         include:
           # Supported `cross` targets:
@@ -82,7 +81,6 @@ jobs:
           # FreeBSD; linking fails
           #- { target: x86_64-unknown-freebsd, os: ubuntu-latest, cross: false }
 
-    continue-on-error: true
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
