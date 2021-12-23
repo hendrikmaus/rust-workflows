@@ -54,8 +54,60 @@ defaults:
     shell: bash
 
 jobs:
+  # The caching job looks for a container image with a release cache
+  # and shares the contents with the subsequent jobs using artifacts.
+  # This way, non-Linux runners can also leverage build caching.
+  cache:
+    name: Restore Cache
+    runs-on: ubuntu-20.04
+    outputs:
+      cache_hit: ${{ steps.data.outputs.cache_hit }}
+      cache_name: cache.tgz
+    steps:
+      - name: Checkout
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+
+#      - uses: actions-rs/toolchain@568dc894a7f9e32ffd9bb7d7a6cebb784cdaa2b0
+#        with:
+#          toolchain: stable
+#          override: true
+#          profile: minimal
+#          target: ${{ matrix.target }}
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.CACHE_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # todo also one build below needs to actually create the cache
+      - name: Restore cache
+        id: restore
+        uses: hendrikmaus/custom-cache-action/restore@master
+        with:
+          registry: ${{ env.CACHE_REGISTRY }}
+          image: ${{ env.CACHE_IMAGE }}
+          # todo need to define where the cache comes from
+          tag: x86_64-unknown-linux-gnu
+
+      # todo can windows runners extract a tarball? tgz file > they have gh installed and it can
+      # Upload the raw tarball from the cache so all subsequent jobs can use it
+      - name: Upload cache
+        if: steps.restore.outputs.cache_hit == true
+        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2
+        with:
+          name: cache.tgz
+          path: ${{ steps.restore.outputs.tarball_path }}
+
+      - name: Set output
+        id: data
+        run: |
+          echo "::set-output name=cache_hit::${{ steps.restore.outputs.cache_hit }}"
+
   binaries:
     name: Binaries
+    needs: cache
     strategy:
       fail-fast: false
       matrix:
@@ -95,21 +147,35 @@ jobs:
           profile: minimal
           target: ${{ matrix.target }}
 
-      - name: Log in to the Container registry
-        if: runner.os == 'Linux'
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ${{ env.CACHE_REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Restore cache
-        if: runner.os == 'Linux'
-        uses: hendrikmaus/custom-cache-action/restore@master
-        with:
-          registry: ${{ env.CACHE_REGISTRY }}
-          image: ${{ env.CACHE_IMAGE }}
-          tag: ${{ matrix.target }}
+        if: needs.cache.outputs.cache_hit == true
+        env:
+          CACHE_NAME: ${{ needs.cache.outputs.cache_name }}
+        run: |
+          tempdir=$(mktemp -d)
+          cd "${tempdir}"
+          # downloads and extracts the artifact
+          gh run download "${GITHUB_RUN_ID}" -n "${CACHE_NAME}"
+          ls -la
+          # let's see how the filesystem looks like afterwards
+          # we may need to move everything into place
+          cd -
+
+#      - name: Log in to the Container registry
+#        if: runner.os == 'Linux'
+#        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+#        with:
+#          registry: ${{ env.CACHE_REGISTRY }}
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Restore cache
+#        if: runner.os == 'Linux'
+#        uses: hendrikmaus/custom-cache-action/restore@master
+#        with:
+#          registry: ${{ env.CACHE_REGISTRY }}
+#          image: ${{ env.CACHE_IMAGE }}
+#          tag: ${{ matrix.target }}
 
       - name: Compile
         uses: actions-rs/cargo@4ff6ec2846f6e7217c1a9b0b503506665f134c4b
@@ -152,14 +218,15 @@ jobs:
           name: ${{ env.PROJ_NAME }}-${{ matrix.target }}.zip
           path: ${{ env.PROJ_NAME }}-${{ matrix.target }}.zip
 
-      - name: Save cache
-        if: runner.os == 'Linux'
-        uses: hendrikmaus/custom-cache-action/save@master
-        with:
-          paths: "${{ github.workspace }}/target /home/runner/.cargo/registry/index /home/runner/.cargo/registry/cache"
-          registry: ${{ env.CACHE_REGISTRY }}
-          image: ${{ env.CACHE_IMAGE }}
-          tag: ${{ matrix.target }}
+# todo at least one linux job needs to save the cache
+#      - name: Save cache
+#        if: runner.os == 'Linux'
+#        uses: hendrikmaus/custom-cache-action/save@master
+#        with:
+#          paths: "${{ github.workspace }}/target /home/runner/.cargo/registry/index /home/runner/.cargo/registry/cache"
+#          registry: ${{ env.CACHE_REGISTRY }}
+#          image: ${{ env.CACHE_IMAGE }}
+#          tag: ${{ matrix.target }}
 
   release:
     name: GitHub Release
