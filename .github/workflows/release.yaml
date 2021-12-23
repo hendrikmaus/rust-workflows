@@ -336,11 +336,9 @@ jobs:
           local_version=$(sed -n 's/^version = \"\(.*\)\"/\1/p' Cargo.toml)
           echo "[INFO] to-release ${local_version}"
           
-          echo "::group::brew tap"
           brew tap hendrikmaus/homebrew-tap
-          echo "::endgroup::"
           
-          index_version=$(brew info rust-workflows | head -n 1 | awk '{print $3}')
+          index_version=$(brew info "${PROJ_NAME}" | head -n 1 | awk '{print $3}')
           echo "[INFO] tap ${index_version}"
           
           if [[ "${index_version}" == "${local_version}" ]]; then
