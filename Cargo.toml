@@ -1,6 +1,6 @@
 [package]
 name = "rust-workflows"
-version = "0.8.0"
+version = "0.8.1"
 edition = "2021"
 description = "A reference for GitHub Action workflows to use on Rust projects"
 license = "MIT"
