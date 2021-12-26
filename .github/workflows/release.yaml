@@ -372,7 +372,7 @@ jobs:
       - homebrew_preflight
     runs-on: ubuntu-20.04
     steps:
-      - uses: mislav/bump-homebrew-formula-action@v1.13
+      - uses: mislav/bump-homebrew-formula-action@v1.15
         with:
           formula-name: ${{ env.PROJ_NAME }}
           formula-path: Formula/${{ env.PROJ_NAME }}.rb
@@ -383,6 +383,8 @@ jobs:
           create-pullrequest: true
           commit-message: |
             {{formulaName}} {{version}}
+            
+            Update **{{formulaName}}** to `{{version}}`.
             
             Created by https://github.com/mislav/bump-homebrew-formula-action, 
             from a workflow based on https://github.com/hendrikmaus/rust-workflows
