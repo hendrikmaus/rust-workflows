@@ -384,6 +384,8 @@ jobs:
           commit-message: |
             {{formulaName}} {{version}}
             
+            Update **{{formulaName}}** to `{{version}}`.
+            
             Created by https://github.com/mislav/bump-homebrew-formula-action, 
             from a workflow based on https://github.com/hendrikmaus/rust-workflows
         env:
