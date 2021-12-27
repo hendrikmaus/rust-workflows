@@ -41,6 +41,8 @@ jobs:
 
 ```
 
+The release workflow is too specific to be offered as re-usable workflow.
+
 ## License
 
 This project is released under the terms of the [MIT](https://opensource.org/licenses/MIT) license.
