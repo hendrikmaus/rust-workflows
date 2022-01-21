@@ -10,7 +10,7 @@
 # Docs: https://git.io/Jg0PP
 #
 
-name: Dependabot auto-merge
+name: Dependabot
 on:
   pull_request:
     paths:
@@ -30,7 +30,7 @@ defaults:
     shell: bash
 
 jobs:
-  dependabot:
+  auto-merge:
     runs-on: ubuntu-20.04
     if: ${{ github.actor == 'dependabot[bot]' }}
     steps:
