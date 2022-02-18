@@ -20,3 +20,10 @@ updates:
       - dependency-type: "all"
     # to only target specific dependencies
     #  - dependency-name: kube
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      # Check for updates to GitHub Actions every weekday
+      interval: "weekly"
+    open-pull-requests-limit: 10
