@@ -11,17 +11,11 @@ on:
     branches:
       - main
       - master
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
   pull_request:
     types:
       - opened
       - reopened
       - synchronize
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
   # The following makes this workflow re-usable by other repositories
   # without having to copy the entire thing.
   # 
