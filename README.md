@@ -22,17 +22,11 @@ on:
     branches:
       - main
       - master
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
   pull_request:
     types:
       - opened
       - reopened
       - synchronize
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
 
 jobs:
   rust-workflows-ci:
