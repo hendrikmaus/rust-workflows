@@ -41,7 +41,7 @@ jobs:
           components: rustfmt
           override: true
           profile: minimal
-      - uses: actions-rs/cargo@4ff6ec2846f6e7217c1a9b0b503506665f134c4b
+      - uses: actions-rs/cargo@9e120dd99b0fbad1c065f686657e914e76bd7b72
         with:
           command: fmt
           args: --all -- --check
@@ -62,7 +62,7 @@ jobs:
           toolchain: stable
           override: true
       - uses: Swatinem/rust-cache@1232abb8968faf344409165de17cbf9e7f340fd8
-      - uses: actions-rs/cargo@4ff6ec2846f6e7217c1a9b0b503506665f134c4b
+      - uses: actions-rs/cargo@9e120dd99b0fbad1c065f686657e914e76bd7b72
         with:
           command: test
 
