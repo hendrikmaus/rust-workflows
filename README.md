@@ -1,3 +1,11 @@
+# ⚠️ Archived ⚠️
+The project did not turn out to be as useful as anticipated.
+Therefore it is no longer maintained.
+
+If you do want to use parts of this, feel free, but make sure to keep the steps updated.
+
+---
+
 # Workflows For Rust Projects
 
 A reference for GitHub Action workflows to use on Rust projects:
